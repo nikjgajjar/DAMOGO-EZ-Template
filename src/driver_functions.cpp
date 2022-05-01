@@ -59,12 +59,34 @@ void home_tilter() {
   while (!tilter_button) {
     tilter.move(-100);
   }
-  //once tilter is pressed, stop the motor
+  // once tilter is pressed, stop the motor
   tilter.move(0);
-  //set the in postion as the current postion +5 (for innacuracies and so it doesnt ram into itself all the time lol)
-  tilter_in_pos = get_tilter_position()+5;
+  // set the in postion as the current postion +5 (for innacuracies and so it doesnt ram into itself all the time lol)
+  tilter_in_pos = get_tilter_position() + 5;
 }
-void set_tilter_in() {
+void set_tilter_in(bool hold) {
   // run built in PID to bring tilter into in position
-  set_
+  set_tilter_position(tilter_in_pos, 100, hold);
+  // set states so the mogo will be in the last position in driver it was in during auto
+  if (hold) {
+    is_tilter_up = true;
+    is_tilter_down = false;
+  }
+}
+void set_tilter_down(bool hold) {
+  // run built in PID to bring tilter into down position
+  set_tilter_position(tilter_down_pos, 100, hold);
+  // set states so the mogo will be in the last position in driver it was in during auto
+  if (hold) {
+    is_tilter_down = true;
+  }
+}
+void set_tilter_out(bool hold) {
+  // run built in PID to bring tilter into out position
+  set_tilter_position(tilter_out_pos, 100, hold);
+  // set states so the mogo will be in the last position in driver it was in during auto
+  if (hold) {
+    is_tilter_down = false;
+    is_tilter_up = false;
+  }
 }
